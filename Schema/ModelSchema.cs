@@ -157,4 +157,11 @@ WHERE {whereClause};
 
     public string UpdateAllCommandText => @$"UPDATE {tableName}
 SET {update};";
+
+    public string UpsertCommandText => @$"
+INSERT INTO {tableName} ({select})
+VALUES ({insert})
+ON CONFLICT({key.name}) DO UPDATE SET
+{update};
+";
 }

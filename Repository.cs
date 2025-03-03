@@ -65,4 +65,12 @@ public class Repository<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTyp
         ModelSchema.PopulateParemetersWith(command.Parameters, model);
         return command.ExecuteNonQuery();
     }
+
+    public int Upsert(T model)
+    {
+        var command = Connection.CreateCommand();
+        command.CommandText = ModelSchema.UpsertCommandText;
+        ModelSchema.PopulateParemetersWith(command.Parameters, model);
+        return command.ExecuteNonQuery();
+    }
 }
