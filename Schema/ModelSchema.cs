@@ -48,11 +48,11 @@ public class ModelSchema<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTy
         {
             var builder = new StringBuilder($"CREATE TABLE IF NOT EXISTS {tableName} (");
             builder.AppendLine();
-            builder.Append($"    {key.name} {key.propertyType.sqlType} PRIMARY KEY");
+            builder.Append($"    {key.name} {key.SqlType} PRIMARY KEY");
             builder.AppendLine(",");
             foreach (var (_, property) in properties.Values)
             {
-                builder.Append($"    {property.name} {property.propertyType.sqlType}");
+                builder.Append($"    {property.name} {property.SqlType}");
                 if (!property.isNullable) builder.Append(" NOT NULL");
                 builder.AppendLine(",");
             }
@@ -67,7 +67,7 @@ public class ModelSchema<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTy
 
     public void SetValueOfKey(T model, SqliteDataReader reader)
     {
-        key.setter(model, key.propertyType.ReadValueFrom(reader, 0));
+        key.setter(model, key.ReadValueFrom(reader, 0));
     }
 
     public void SetValueOfKey(T model, object value) => key.setter(model, value);
@@ -77,7 +77,7 @@ public class ModelSchema<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTy
     public void SetValueOfProperty(T model, string nameOfProperty, SqliteDataReader reader)
     {
         var (ordinal, property) = properties[nameOfProperty];
-        property.setter(model, property.propertyType.ReadValueFrom(reader, ordinal));
+        property.setter(model, property.ReadValueFrom(reader, ordinal));
     }
 
     public void SetValueOfProperty(T model, string nameOfProperty, object value) => properties[nameOfProperty].property.setter(model, value);
@@ -87,11 +87,11 @@ public class ModelSchema<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTy
     public T CreateModelFrom(SqliteDataReader reader)
     {
         var model = new T();
-        key.setter(model, key.propertyType.ReadValueFrom(reader, 0));
+        key.setter(model, key.ReadValueFrom(reader, 0));
         int ordinal = 1;
         foreach (var pair in properties.Values)
         {
-            pair.property.setter(model, pair.property.propertyType.ReadValueFrom(reader, ordinal));
+            pair.property.setter(model, pair.property.ReadValueFrom(reader, ordinal));
             ordinal++;
         }
         return model;

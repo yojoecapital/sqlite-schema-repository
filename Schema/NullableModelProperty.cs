@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
+using Microsoft.Data.Sqlite;
 
 namespace SqliteSchemaRepository.Schema;
 
@@ -29,5 +30,11 @@ public class NullableModelProperty<[DynamicallyAccessedMembers(DynamicallyAccess
     public NullableModelProperty(string name, PropertyType propertyType, bool isNullable) : base(name, propertyType)
     {
         this.isNullable = isNullable;
+    }
+
+    public override object ReadValueFrom(SqliteDataReader reader, int ordinal)
+    {
+        if (isNullable && reader.IsDBNull(ordinal)) return null;
+        return base.ReadValueFrom(reader, ordinal);
     }
 }

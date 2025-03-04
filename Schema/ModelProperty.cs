@@ -1,14 +1,19 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
+using Microsoft.Data.Sqlite;
 
 namespace SqliteSchemaRepository.Schema;
 
 public class ModelProperty<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)] T> where T : class
 {
     public readonly string name;
-    public readonly PropertyType propertyType;
+    private readonly PropertyType propertyType;
     public readonly Func<T, object> getter;
     public readonly Action<T, object> setter;
+
+    public string SqlType => propertyType.sqlType;
+
+    public virtual object ReadValueFrom(SqliteDataReader reader, int ordinal) => propertyType.ReadValueFrom(reader, ordinal);
 
     public ModelProperty(
         string name, PropertyType propertyType,
