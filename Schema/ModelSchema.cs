@@ -103,7 +103,9 @@ public class ModelSchema<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTy
         int ordinal = 1;
         foreach (var pair in properties.Values)
         {
-            parameters.AddWithValue(pair.property.name, pair.property.getter(model));
+            var value = pair.property.getter(model);
+            if (pair.property.isNullable && value == null) value = DBNull.Value;
+            parameters.AddWithValue(pair.property.name, value);
             ordinal++;
         }
     }
