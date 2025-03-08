@@ -16,8 +16,6 @@ public abstract class PropertyType(string sqlType)
     public static PropertyType Double => new PropertyType<double>("REAL", ReadDouble);
     public static PropertyType Float => new PropertyType<float>("REAL", ReadFloat);
     public static PropertyType Boolean => new PropertyType<bool>("INTEGER", ReadBoolean);
-    public static PropertyType UtcDateTime => new PropertyType<DateTime>("INTEGER", ReadUtcDateTime);
-    public static PropertyType DateTime => new PropertyType<DateTime>("INTEGER", ReadDateTime);
 
     private static string ReadString(SqliteDataReader reader, int ordinal) => reader.GetString(ordinal);
     private static int ReadInteger(SqliteDataReader reader, int ordinal) => reader.GetInt32(ordinal);
@@ -25,8 +23,6 @@ public abstract class PropertyType(string sqlType)
     private static double ReadDouble(SqliteDataReader reader, int ordinal) => reader.GetDouble(ordinal);
     private static float ReadFloat(SqliteDataReader reader, int ordinal) => reader.GetFloat(ordinal);
     private static bool ReadBoolean(SqliteDataReader reader, int ordinal) => reader.GetBoolean(ordinal);
-    private static DateTime ReadUtcDateTime(SqliteDataReader reader, int ordinal) => DateTimeOffset.FromUnixTimeMilliseconds(reader.GetInt64(ordinal)).UtcDateTime;
-    private static DateTime ReadDateTime(SqliteDataReader reader, int ordinal) => DateTimeOffset.FromUnixTimeMilliseconds(reader.GetInt64(ordinal)).DateTime;
 
 }
 
