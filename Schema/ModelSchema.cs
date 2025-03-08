@@ -28,7 +28,7 @@ public class ModelSchema<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTy
         this.properties = properties
            .Select((prop, index) => new { prop, index })
            .ToDictionary(x => x.prop.name, x => (x.index + 1, x.prop)).AsReadOnly();
-        var combined = (new ModelProperty<T>[] { key }).Concat(properties.Cast<ModelProperty<T>>()).ToArray();
+        var combined = (new ModelProperty<T>[] { key }).Concat(properties).ToArray();
         select = string.Join(", ", combined.Select(property => property.name));
         insert = string.Join(", ", combined.Select(property => $"@{property.name}"));
         update = string.Join(", ", properties.Select(property => $"{property.name} = @{property.name}"));
